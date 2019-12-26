@@ -47,22 +47,23 @@ todoRoutes.route('/add').post(function (req, res) {
     });
 });
 
-todoRoutes.route('/update/:id').post(function (req, res) {
-  Todo.findById(req.params.id, function (err, todo) {
+todoRoutes.route('/update/:id').put(function (req, res) {
+  Todo.findById(req.params.id, (err, todo) => {
     if (!todo)
       res.status(404).send("data is not found");
-    else
+    else {
       todo.todo_description = req.body.todo_description;
-    todo.todo_responsible = req.body.todo_responsible;
-    todo.todo_priority = req.body.todo_priority;
-    todo.todo_completed = req.body.todo_completed;
+      todo.todo_responsible = req.body.todo_responsible;
+      todo.todo_priority = req.body.todo_priority;
+      todo.todo_completed = req.body.todo_completed;
 
-    todo.save().then(todo => {
-      res.json('Todo updated!');
-    })
-      .catch(err => {
-        res.status(400).send("Update not possible");
-      });
+      todo.save().then(todo => {
+        res.json('Todo updated!');
+      })
+        .catch(err => {
+          res.status(400).send("Update not possible");
+        });
+    }
   });
 });
 
