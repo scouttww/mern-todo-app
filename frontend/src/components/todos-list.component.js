@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import DeleteTodo from "./delete-todo.component";
 
 const Todo = props => (
   <tr>
@@ -9,19 +10,31 @@ const Todo = props => (
     <td className={props.todo.todo_completed ? 'completed' : ''}>{props.todo.todo_priority}</td>
     <td>
       <Link to={"/edit/" + props.todo._id}>Edit</Link>
+      <br />
+      <DeleteTodo id={props.todo._id}/>
     </td>
   </tr>
 )
+
+
 
 export default class TodosList extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { todos: [] };
+    this.state = {
+      todos: []
+    };
+
+  }
+
+  onDeleteTodo() {
+    setTimeout(() => {
+      this.getData()
+    }, 250)
   }
 
   componentDidMount() {
-
     setTimeout(() => {
       this.getData()
     }, 250)
@@ -59,9 +72,14 @@ export default class TodosList extends Component {
   }
 
   todoList() {
-    return this.state.todos.map(function (currentTodo, i) {
-      return <Todo todo={currentTodo} key={i} />;
+    this.state.todos.sort((a, b) => {
+      return b._id - a._id;
+
+    });
+    return this.state.todos.map((currentTodo) => {
+      return <Todo todo={currentTodo} key={currentTodo._id}/>;
     })
   }
+
 }
 
